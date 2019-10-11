@@ -1,0 +1,29 @@
+import pandas as pd
+import os
+datadir = './data-gaoguangpu/'
+
+files= os.listdir(datadir) #得到文件夹下的所有文件名称
+spectrum_columns = []
+spectrum_columns.append('Asd')
+for i in range(325, 1076, 1):
+    spectrum_columns.append(str(i))
+result = pd.DataFrame(columns=spectrum_columns)
+k = 0
+for file in files: #遍历文件夹
+     if file == '.DS_Store':
+         continue
+     print(file)
+     if not os.path.isdir(file): #判断是否是文件夹，不是文件夹才打开
+         df = pd.read_table(datadir + file, sep='\t')
+         asd_columns = df.columns[1]
+         asd = df.columns[1].split('.')[0]
+         for i in range(325, 1076, 1):
+             result.loc[k,'Asd'] = asd
+             index = df[df['Wavelength'] == i].index.tolist()
+             result.loc[k, str(i)] = df[asd_columns][index[0]]
+     k = k + 1
+     # if k ==3:
+     #    break
+
+
+result.to_excel('高光谱数据618.xlsx')
