@@ -1,0 +1,46 @@
+##加载包
+import numpy as np
+import pandas as pd
+##import os
+
+##读取数据
+##data_dir = r'D:\1博士2\2019试验数据\高光谱\825光谱数据'
+df=pd.read_excel(r'D:\1博士2\2019试验数据\高光谱\812光谱数据\高光谱数据812-python.xlsx')
+##df[:5]
+
+##提取波段参数，求植被指数
+nir=df['865']
+red=df['650']
+green=df['563']
+blue=df['483']
+
+##归一化植被指数
+NDVI= (nir-red)/(nir+red)
+##比值植被指数
+RVI=nir/red
+##绿光比值植被指数
+GRVI=nir/green
+##增强型植被指数1
+EVI1=2.5 * (nir-red) / (nir+6*red-7.5*blue)
+##增强型植被指数2
+EVI2=2.5 * (nir-red) / (nir+2.4*red+1)
+##土壤调整植被指数
+SAVI=1.5*(nir-red)/(nir+red+0.5)
+##优化的土壤调整植被指数
+OSAVI=1.16*(nir-red)/(nir-red+0.16)
+
+##df1.index=df.index
+##df1['NDVI','RVI','GRVI','EVI1','EVI2','SAVI','OSAVI']=[NDVI,RVI,GRVI,EVI1,EVI2,SAVI,OSAVI]
+
+##df['NDVI','RVI','GRVI','EVI1','EVI2','SAVI','OSAVI']=[NDVI,RVI,GRVI,EVI1,EVI2,SAVI,OSAVI]
+##df1.index=[(0:204)]
+df['NDVI']= NDVI
+df['RVI']= RVI
+df['GRVI']= GRVI
+df['EVI1']= EVI1
+df['EVI2']= EVI2
+df['SAVI']= SAVI
+df['OSAVI']= OSAVI
+
+
+df.to_excel(r'D:\1博士2\2019试验数据\高光谱\812光谱数据\植被指数812.xlsx')
